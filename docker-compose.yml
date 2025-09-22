@@ -1,0 +1,62 @@
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: spring-otel-postgres
+    environment:
+      POSTGRES_DB: userdb
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: apppassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./src/main/resources/data.sql:/docker-entrypoint-initdb.d/02-data.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appuser -d userdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - spring-otel-network
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: spring-otel-jaeger
+    ports:
+      - "16686:16686"
+      - "14250:14250"
+      - "4317:4317"
+      - "4318:4318"
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    networks:
+      - spring-otel-network
+
+  spring-app:
+    build: .
+    container_name: spring-otel-app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/userdb
+      - SPRING_DATASOURCE_USERNAME=appuser
+      - SPRING_DATASOURCE_PASSWORD=apppassword
+      - OTEL_SERVICE_NAME=spring-opentelemetry-jaeger
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+    depends_on:
+      postgres:
+        condition: service_healthy
+      jaeger:
+        condition: service_started
+    networks:
+      - spring-otel-network
+
+volumes:
+  postgres_data:
+
+networks:
+  spring-otel-network:
+    driver: bridge

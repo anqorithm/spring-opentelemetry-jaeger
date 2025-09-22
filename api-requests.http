@@ -1,0 +1,166 @@
+### Spring OpenTelemetry Jaeger API Test Requests
+
+### Health Check
+GET http://localhost:8080/api/users/health
+Accept: application/json
+
+###
+
+### Get All Users
+GET http://localhost:8080/api/users
+Accept: application/json
+
+###
+
+### Search Users by Name - Ahmad
+GET http://localhost:8080/api/users?name=Ahmad
+Accept: application/json
+
+###
+
+### Search Users by Name - Fatima
+GET http://localhost:8080/api/users?name=Fatima
+Accept: application/json
+
+###
+
+### Get User by ID - Ahmad
+GET http://localhost:8080/api/users/550e8400-e29b-41d4-a716-446655440001
+Accept: application/json
+
+###
+
+### Get User by ID - Abdullah
+GET http://localhost:8080/api/users/550e8400-e29b-41d4-a716-446655440003
+Accept: application/json
+
+###
+
+### Get Non-existent User (should return 404)
+GET http://localhost:8080/api/users/non-existent-id
+Accept: application/json
+
+###
+
+### Create New User - Omar
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "name": "Omar",
+  "email": "omar@example.com"
+}
+
+###
+
+### Create New User - Aisha
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "name": "Aisha",
+  "email": "aisha@example.com"
+}
+
+###
+
+### Create User with Duplicate Email (should fail)
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "name": "Duplicate User",
+  "email": "ahmad@example.com"
+}
+
+###
+
+### Create User with Invalid Email
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "name": "Hassan",
+  "email": "invalid-email"
+}
+
+###
+
+### Create User with Missing Name (should fail)
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "email": "missing.name@example.com"
+}
+
+###
+
+### Update Existing User - Ahmad
+PUT http://localhost:8080/api/users/550e8400-e29b-41d4-a716-446655440001
+Content-Type: application/json
+
+{
+  "name": "Ahmad Ali",
+  "email": "ahmad.ali@example.com"
+}
+
+###
+
+### Update Existing User - Maryam
+PUT http://localhost:8080/api/users/550e8400-e29b-41d4-a716-446655440004
+Content-Type: application/json
+
+{
+  "name": "Maryam Ahmed",
+  "email": "maryam.ahmed@example.com"
+}
+
+###
+
+### Update Non-existent User (should return 404)
+PUT http://localhost:8080/api/users/non-existent-id
+Content-Type: application/json
+
+{
+  "name": "Should Not Work",
+  "email": "should.not.work@example.com"
+}
+
+###
+
+### Delete User - Khalid
+DELETE http://localhost:8080/api/users/550e8400-e29b-41d4-a716-446655440005
+Accept: application/json
+
+###
+
+### Delete Non-existent User (should return 404)
+DELETE http://localhost:8080/api/users/non-existent-id
+Accept: application/json
+
+###
+
+### Concurrent Requests (Test Load and Tracing)
+GET http://localhost:8080/api/users/550e8400-e29b-41d4-a716-446655440002
+
+###
+
+GET http://localhost:8080/api/users/550e8400-e29b-41d4-a716-446655440003
+
+###
+
+GET http://localhost:8080/api/users/550e8400-e29b-41d4-a716-446655440004
+
+###
+
+### Test Validation Error
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "name": "",
+  "email": ""
+}
+
+###

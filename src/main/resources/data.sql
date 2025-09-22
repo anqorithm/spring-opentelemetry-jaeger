@@ -1,0 +1,6 @@
+INSERT INTO users (id, name, email, created_at, updated_at) VALUES
+('550e8400-e29b-41d4-a716-446655440001', 'Ahmad', 'ahmad@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('550e8400-e29b-41d4-a716-446655440002', 'Fatima', 'fatima@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('550e8400-e29b-41d4-a716-446655440003', 'Abdullah', 'abdullah@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('550e8400-e29b-41d4-a716-446655440004', 'Maryam', 'maryam@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('550e8400-e29b-41d4-a716-446655440005', 'Khalid', 'khalid@example.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
